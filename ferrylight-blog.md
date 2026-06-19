@@ -1,11 +1,5 @@
 # FerryLight System: A Comprehensive Briefing
 
-<!--
-  Tags: FerryLight, Englishtown ferry, Jersey Cove, Nova Scotia, Cape Breton,
-  AIS tracking, PWA, Node-RED, WLED, community app, vessel tracking,
-  St Ann's Loop, Victoria County, North Shore NS, real-time ferry status
--->
-
 ## Executive Summary
 
 FerryLight is a comprehensive, real-time community information system designed for the Englishtown ↔ Jersey Cove ferry route in Nova Scotia, Canada. The system's primary objective is to eliminate travel uncertainty by providing live ferry status, vessel tracking, and wait time estimations, thereby helping users decide between waiting for the 3-5 minute ferry ride or taking the alternative 25-minute St. Ann's Loop. Beyond ferry monitoring, FerryLight functions as a central community hub, integrating local weather data, community event calendars, a directory of local businesses, and even marine wildlife tracking.
@@ -179,7 +173,7 @@ MQTT Topics:
 
 ### 4.1. Push Notification System
 
-The system uses the Web Push API with VAPID authentication. A server-side monitoring loop checks for status changes every two minutes and sends deduplicated notifications. Recent updates (v5.2.6) improved reliability by ensuring notifications link correctly to the live site and prevented duplicate announcements.
+Recent updates (v5.2.10) improved iOS PWA install UX, ferry wait-time accuracy during extended docking, and safe-area layout for installed apps. Push notifications use the Web Push API with VAPID authentication; a server-side monitoring loop checks for status changes every two minutes and sends deduplicated notifications.
 
 ![Push Notification Flow](images/push_notification_diagram.png)
 *Push notification system flow from user subscription to notification delivery*
@@ -257,7 +251,7 @@ The entire system is containerized for resilience and ease of management, deploy
 
 ### 6.2. Future Development: PAX Counters
 
-> **Note:** FerryLight is currently in Beta (v5.2.6). The PAX Counter system was successfully tested in summer 2025 and is planned for full deployment in summer 2026.
+> **Note:** FerryLight is currently in Beta (v5.2.10). The PAX Counter system was successfully tested in summer 2025 and is planned for full deployment in summer 2026.
 
 To improve the accuracy of wait time estimations, a system of PAX counters is being developed.
 
