@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FerryLight System Briefing</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.0/dist/reset.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.0/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.0/dist/theme/night.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.0/plugin/highlight/monokai.css">
+    <style>
+        :root {
+            --r-heading-color: #58a6ff;
+            --r-link-color: #58a6ff;
+            --r-background-color: #0d1117;
+        }
+
+        .reveal h1 {
+            color: #58a6ff;
+            font-size: 2.5em;
+            text-shadow: 0 4px 20px rgba(88, 166, 255, 0.3);
+        }
+
+        .reveal h2 {
+            color: #58a6ff;
+            font-size: 1.8em;
+            margin-bottom: 0.8em;
+            border-bottom: 2px solid #30363d;
+            padding-bottom: 0.3em;
+        }
+
+        .reveal h3 {
+            color: #7ee787;
+            font-size: 1.1em;
+            margin-top: 0.5em;
+        }
+
+        .reveal h4 {
+            color: #f0f6fc;
+            font-size: 0.95em;
+            margin-bottom: 0.3em;
+        }
+
+        .reveal .slides section {
+            text-align: left;
+            padding: 20px;
+        }
+
+        .reveal table {
+            font-size: 0.75em;
+            margin: 0 auto;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .reveal table th {
+            background: linear-gradient(135deg, #21262d 0%, #30363d 100%);
+            color: #58a6ff;
+            padding: 12px 16px;
+            font-weight: 600;
+        }
+
+        .reveal table td {
+            background: #161b22;
+            padding: 10px 16px;
+            border-bottom: 1px solid #21262d;
+        }
+
+        .reveal pre {
+            font-size: 0.55em;
+        }
+
+        .reveal .emoji {
+            font-size: 1.5em;
+        }
+
+        .center {
+            text-align: center !important;
+        }
+
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.2rem;
+            font-size: 0.65em;
+        }
+
+        .component-card {
+            background: linear-gradient(135deg, #21262d 0%, #161b22 100%);
+            padding: 1.2rem;
+            border-radius: 12px;
+            border-left: 4px solid #58a6ff;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .component-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(88, 166, 255, 0.15);
+        }
+
+        .component-card p {
+            color: #8b949e;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+            padding: 1.2rem 1.5rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+            box-shadow: 0 4px 15px rgba(35, 134, 54, 0.3);
+        }
+
+        .highlight-box p {
+            margin: 0;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            text-align: center;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #21262d 0%, #161b22 100%);
+            padding: 1.2rem 0.8rem;
+            border-radius: 12px;
+            border: 1px solid #30363d;
+        }
+
+        .stat-box .number {
+            font-size: 2.2em;
+            color: #58a6ff;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+        .stat-box .label {
+            color: #8b949e;
+            font-size: 0.75em;
+            margin-top: 0.3em;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+
+        .tech-badge {
+            background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(35, 134, 54, 0.3);
+        }
+
+        /* Image styling */
+        .reveal img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .image-row {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-caption {
+            font-size: 0.55em;
+            text-align: center;
+            color: #8b949e;
+            margin-top: 0.8em;
+        }
+
+        /* Stats highlight colors */
+        .stat-highlight {
+            color: #7ee787 !important;
+        }
+
+        .stat-warning {
+            color: #f0883e !important;
+        }
+
+        /* List styling */
+        .reveal ul {
+            margin: 0.5em 0;
+        }
+
+        .reveal li {
+            margin: 0.4em 0;
+            line-height: 1.5;
+        }
+
+        /* Section divider */
+        .section-divider {
+            border-top: 1px solid #30363d;
+            margin: 1.5em 0 1em 0;
+        }
+
+        /* Slide number styling */
+        .reveal .slide-number {
+            background: rgba(88, 166, 255, 0.2);
+            color: #58a6ff;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- Title Slide -->
+            <section class="center">
+                <h1>⛴️ FerryLight</h1>
+                <h2 style="border: none;">Comprehensive System Briefing</h2>
+                <p style="color: #8b949e; font-size: 1em; margin: 1em 0;">Real-time Community Information System</p>
+                <div style="margin-top: 2em;">
+                    <span
+                        style="font-size: 0.7em; color: #58a6ff; background: rgba(88, 166, 255, 0.1); padding: 0.5em 1em; border-radius: 20px;">Version
+                        5.2.6 (Beta) | January 2026</span>
+                </div>
+                <p style="font-size: 0.6em; color: #8b949e; margin-top: 1.5em;">Markus van Kempen</p>
+            </section>
+
+            <!-- Executive Summary -->
+            <section>
+                <h2>📝 Executive Summary</h2>
+                <div class="highlight-box">
+                    <p style="font-size: 0.9em">A real-time system to eliminate travel uncertainty for the
+                        <strong>Englishtown ↔ Jersey Cove</strong> ferry crossing in Nova Scotia, Canada.</p>
+                </div>
+                <div class="stat-grid" style="margin-top: 1.5em;">
+                    <div class="stat-box">
+                        <div class="number">v5.2.6</div>
+                        <div class="label">Current Version</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number">24/7</div>
+                        <div class="label">Real-time Tracking</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number">5+</div>
+                        <div class="label">Data Sources</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number">PWA</div>
+                        <div class="label">Mobile Ready</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- The Problem -->
+            <section>
+                <h2>🎯 Problem & Solution</h2>
+                <div class="component-grid" style="grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div class="component-card" style="border-left-color: #f0883e;">
+                        <h3 style="color: #f0883e;">⚠️ The Challenge</h3>
+                        <ul style="font-size: 1.1em; color: #c9d1d9;">
+                            <li>Uncertain ferry status</li>
+                            <li><strong>25-minute detour</strong> if ferry down</li>
+                            <li>Limited internet at ports</li>
+                            <li>Older residents need simple displays</li>
+                        </ul>
+                    </div>
+                    <div class="component-card" style="border-left-color: #7ee787;">
+                        <h3>✅ FerryLight Solution</h3>
+                        <ul style="font-size: 1.1em; color: #c9d1d9;">
+                            <li>Real-time AIS vessel tracking</li>
+                            <li>Physical roadside LED displays</li>
+                            <li>Offline-first Progressive Web App</li>
+                            <li>Smart push notifications</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Ferry Statistics -->
+            <section>
+                <h2>📊 Ferry Statistics</h2>
+                <div class="stat-grid">
+                    <div class="stat-box">
+                        <div class="number">15</div>
+                        <div class="label">Vehicle Capacity</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number">97</div>
+                        <div class="label">Passenger Capacity</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number">125m</div>
+                        <div class="label">Crossing Distance</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number stat-highlight">3 min</div>
+                        <div class="label">Crossing Time</div>
+                    </div>
+                </div>
+                <div class="stat-grid" style="margin-top: 1rem;">
+                    <div class="stat-box">
+                        <div class="number stat-highlight">FREE</div>
+                        <div class="label">Cost to Cross</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number">155+</div>
+                        <div class="label">Peak Day Trips</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number">1000+</div>
+                        <div class="label">Weekly Trips</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number stat-warning">22 min</div>
+                        <div class="label">Detour Time</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Core Features -->
+            <section>
+                <h2>✨ Core Features</h2>
+                <div class="component-grid">
+                    <div class="component-card">
+                        <h4>🚢 Ferry Tracking</h4>
+                        <p>Live AIS position & real-time status updates</p>
+                    </div>
+                    <div class="component-card">
+                        <h4>🌤️ Weather</h4>
+                        <p>Local weather station + Environment Canada alerts</p>
+                    </div>
+                    <div class="component-card">
+                        <h4>📅 Events</h4>
+                        <p>Community calendar, garbage schedules, announcements</p>
+                    </div>
+                    <div class="component-card">
+                        <h4>💡 LED Display</h4>
+                        <p>Physical WLED matrix for roadside status</p>
+                    </div>
+                    <div class="component-card">
+                        <h4>🛍️ Shop</h4>
+                        <p>FerryLight merchandise with Stripe payments</p>
+                    </div>
+                    <div class="component-card">
+                        <h4>🏰 Attractions</h4>
+                        <p>Local business directory for visitors</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- System Architecture -->
+            <section>
+                <h2>🏗️ System Architecture</h2>
+                <div style="text-align: center;">
+                    <img src="images/system_architecture_diagram.png"
+                        style="background: white; padding: 15px; max-height: 450px;">
+                </div>
+                <p class="image-caption">Signal to Screen: Complete data flow from AIS receiver to user devices</p>
+            </section>
+
+            <!-- Data Flow Diagram -->
+            <section>
+                <h2>🔄 Data Flow Sequence</h2>
+                <div style="text-align: center;">
+                    <img src="images/data_flow_diagram.png"
+                        style="background: white; padding: 15px; max-height: 480px;">
+                </div>
+            </section>
+
+            <!-- Web App Visuals -->
+            <section>
+                <h2>📱 Web Application</h2>
+                <div class="image-row">
+                    <img src="images/ferry_page.png" style="height: 320px;">
+                    <img src="images/weather_page.png" style="height: 320px;">
+                    <img src="images/events_page.png" style="height: 320px;">
+                </div>
+                <p class="image-caption">Ferry Status • Weather Conditions • Community Events</p>
+            </section>
+
+            <!-- Shop Feature -->
+            <section>
+                <h2>🛍️ FerryLight Shop</h2>
+                <div style="display: flex; gap: 30px; justify-content: center; align-items: center;">
+                    <img src="images/PurchaseFerryLight.png" style="max-height: 380px;">
+                    <div style="font-size: 0.8em;">
+                        <div class="component-card" style="margin-bottom: 1em;">
+                            <h4>🛒 E-Commerce Features</h4>
+                            <ul style="color: #c9d1d9;">
+                                <li>FerryLight branded merchandise</li>
+                                <li>T-shirts, caps, mugs & more</li>
+                                <li>International shipping support</li>
+                            </ul>
+                        </div>
+                        <div class="component-card">
+                            <h4>💳 Secure Checkout</h4>
+                            <ul style="color: #c9d1d9;">
+                                <li>Stripe payment integration</li>
+                                <li>Real-time shipping calculation</li>
+                                <li>Order tracking & email confirmation</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Physical Layer -->
+            <section>
+                <h2>💡 Physical Layer (IoT)</h2>
+                <div class="image-row">
+                    <img src="images/led_display_test.jpg" style="height: 220px;">
+                    <img src="images/FerryInServiceSign.png" style="height: 220px;">
+                </div>
+                <div class="highlight-box" style="margin-top: 1.5em;">
+                    <p style="font-size: 0.85em; text-align: center;"><strong>WLED Matrix Displays</strong> & Road
+                        Signage — Designed for residents who prefer physical indicators over mobile apps</p>
+                </div>
+            </section>
+
+            <!-- Tech Stack -->
+            <section>
+                <h2>🛠️ Technology Stack</h2>
+                <table style="width: 80%;">
+                    <tr>
+                        <th>Layer</th>
+                        <th>Technologies</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Frontend</strong></td>
+                        <td>React 18, PWA, Leaflet Maps, Styled Components</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Backend</strong></td>
+                        <td>Node.js, Express.js, WebSocket</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Integration</strong></td>
+                        <td>Node-RED, MQTT, REST APIs</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Data</strong></td>
+                        <td>PostgreSQL, Docker, Docker Compose</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Infrastructure</strong></td>
+                        <td>Traefik, Let's Encrypt SSL, VPS</td>
+                    </tr>
+                </table>
+                <div class="tech-stack">
+                    <span class="tech-badge">Docker</span>
+                    <span class="tech-badge">Traefik</span>
+                    <span class="tech-badge">Web Push API</span>
+                    <span class="tech-badge">AIS Receiver</span>
+                    <span class="tech-badge">Schema.org SEO</span>
+                </div>
+            </section>
+
+            <!-- Future Development -->
+            <section>
+                <h2>🚀 Future: PAX Counters</h2>
+                <div class="component-card" style="max-width: 800px; margin: 0 auto;">
+                    <h3 style="margin-bottom: 0.5em;">🗓️ Planned for Summer 2026</h3>
+                    <div style="font-size: 0.85em; color: #c9d1d9;">
+                        <p><strong style="color: #f0883e;">Problem:</strong> AIS tracking shows ferry position but can't
+                            measure queue length at terminals.</p>
+                        <p><strong style="color: #58a6ff;">Solution:</strong> Deploy LoRaWAN-connected Bluetooth/WiFi
+                            sniffers at both ferry ports.</p>
+                        <p><strong style="color: #7ee787;">Goal:</strong> Accurate wait time estimation based on device
+                            density in the queue.</p>
+                    </div>
+                </div>
+                <div class="stat-grid" style="margin-top: 1.5em; grid-template-columns: repeat(3, 1fr);">
+                    <div class="stat-box">
+                        <div class="number">2</div>
+                        <div class="label">Port Locations</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number">LoRa</div>
+                        <div class="label">Wireless Protocol</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number">Real-time</div>
+                        <div class="label">Queue Updates</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Deployment -->
+            <section>
+                <h2>🌐 Deployment</h2>
+                <div class="highlight-box" style="text-align: center; margin-bottom: 1.5em;">
+                    <a href="https://ferrylight.online"
+                        style="font-size: 1.4em; font-weight: bold; color: white; text-decoration: none;">🔗
+                        ferrylight.online</a>
+                </div>
+                <div class="component-grid" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="component-card">
+                        <h4>🐳 VPS Hosted</h4>
+                        <p>Fully Dockerized multi-container environment</p>
+                    </div>
+                    <div class="component-card">
+                        <h4>🔄 DevOps</h4>
+                        <p>Git-based deployment with auto-build pipeline</p>
+                    </div>
+                    <div class="component-card">
+                        <h4>📡 Monitoring</h4>
+                        <p>Auto-recovery, health checks, uptime alerts</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Thank You -->
+            <section class="center">
+                <h1>🙏 Thank You</h1>
+                <p style="color: #8b949e; font-size: 1.1em; margin: 0.5em 0;">FerryLight System Briefing</p>
+                <img src="images/PictureOftheFerryOnTheFerry.jpg" style="height: 180px; margin: 1.5em 0; opacity: 0.9;">
+                <div style="margin-top: 1em;">
+                    <p style="font-size: 0.7em; color: #58a6ff;">ferrylight.online</p>
+                    <p style="font-size: 0.6em; color: #8b949e;">Markus van Kempen • January 2026</p>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.0/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.0/plugin/highlight/highlight.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            transition: 'slide',
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade',
+            plugins: [RevealHighlight],
+            autoPlayMedia: true,
+            width: 1200,
+            height: 700,
+            margin: 0.1
+        });
+    </script>
+</body>
+
+</html>
