@@ -1,5 +1,11 @@
 # FerryLight System: A Comprehensive Briefing
 
+<!--
+  Tags: FerryLight, Englishtown ferry, Jersey Cove, Nova Scotia, Cape Breton,
+  AIS tracking, PWA, Node-RED, WLED, community app, vessel tracking,
+  St Ann's Loop, Victoria County, North Shore NS, real-time ferry status
+-->
+
 ## Executive Summary
 
 FerryLight is a comprehensive, real-time community information system designed for the Englishtown ↔ Jersey Cove ferry route in Nova Scotia, Canada. The system's primary objective is to eliminate travel uncertainty by providing live ferry status, vessel tracking, and wait time estimations, thereby helping users decide between waiting for the 3-5 minute ferry ride or taking the alternative 25-minute St. Ann's Loop. Beyond ferry monitoring, FerryLight functions as a central community hub, integrating local weather data, community event calendars, a directory of local businesses, and even marine wildlife tracking.
