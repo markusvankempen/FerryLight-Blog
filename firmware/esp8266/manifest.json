@@ -1,7 +1,7 @@
 {
-  "version": "0.3.26",
+  "version": "0.3.27",
   "url": "https://raw.githubusercontent.com/markusvankempen/FerryLight-Blog/main/firmware/esp8266/latest/firmware.bin",
-  "md5": "03edcfc75d432f57fcaf7203af34665b",
+  "md5": "a469fa113a042025068a8fc9dfedf3a6",
   "size": 682608,
   "chip": "esp8266",
   "board": "d1_mini"
