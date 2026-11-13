@@ -536,8 +536,18 @@
           </div>
 
           <div class="form-group">
-            <label for="wifiPass">Wi-Fi Password:</label>
-            <input type="password" id="wifiPass" class="form-input" placeholder="Wi-Fi Password (leave empty if open)">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <label for="wifiPass" style="margin: 0;">Wi-Fi Password:</label>
+              <label style="font-size: 0.78rem; color: var(--mut); display: flex; align-items: center; gap: 4px; cursor: pointer; user-select: none;">
+                <input type="checkbox" id="showPassToggle"> Show Password
+              </label>
+            </div>
+            <div style="position: relative; display: flex; align-items: center;">
+              <input type="password" id="wifiPass" class="form-input" placeholder="Wi-Fi Password (leave empty if open)" style="padding-right: 42px;">
+              <button type="button" id="togglePassBtn" style="position: absolute; right: 6px; background: transparent; border: none; color: var(--mut); cursor: pointer; font-size: 1.1rem; padding: 4px;" title="Toggle password visibility">
+                👁️
+              </button>
+            </div>
           </div>
 
           <div style="display: flex; gap: 8px; margin-top: 4px;">
@@ -836,6 +846,22 @@
     document.getElementById('wifiScanSelect').addEventListener('change', (e) => {
       if (e.target.value) document.getElementById('wifiSsid').value = e.target.value;
     });
+
+    // Password visibility toggle
+    const wifiPassInput = document.getElementById('wifiPass');
+    const showPassToggle = document.getElementById('showPassToggle');
+    const togglePassBtn = document.getElementById('togglePassBtn');
+
+    function togglePasswordVisibility(show) {
+      const isPass = wifiPassInput.type === 'password';
+      const shouldShow = (typeof show === 'boolean') ? show : isPass;
+      wifiPassInput.type = shouldShow ? 'text' : 'password';
+      if (showPassToggle) showPassToggle.checked = shouldShow;
+      if (togglePassBtn) togglePassBtn.textContent = shouldShow ? '🙈' : '👁️';
+    }
+
+    if (togglePassBtn) togglePassBtn.addEventListener('click', () => togglePasswordVisibility());
+    if (showPassToggle) showPassToggle.addEventListener('change', (e) => togglePasswordVisibility(e.target.checked));
 
     document.getElementById('saveWifiBtn').addEventListener('click', () => {
       const ssid = document.getElementById('wifiSsid').value.trim();
