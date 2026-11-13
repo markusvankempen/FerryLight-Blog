@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FerryLight Blog — Englishtown Ferry Tracker | Nova Scotia Community Tech</title>
+  <meta name="description" content="FerryLight blog: real-time Englishtown ↔ Jersey Cove ferry tracking, Cape Breton community app, AIS vessel tracking, PWA, Node-RED, WLED LED display, weather & events. System briefing, slides, podcast & PDF.">
+  <meta name="keywords" content="FerryLight, Englishtown ferry, Jersey Cove ferry, Nova Scotia ferry, Cape Breton, St Ann's Loop, AIS tracking, ferry wait time, PWA, Node-RED, community app, Victoria County, North Shore NS, vessel tracking, WLED, IoT, weather station">
+  <meta name="author" content="Markus van Kempen">
+  <link rel="canonical" href="https://markusvankempen.github.io/FerryLight-Blog/">
+  <meta property="og:title" content="FerryLight Blog — A Digital Lifeline for the North Shore">
+  <meta property="og:description" content="Real-time ferry tracking for Englishtown ↔ Jersey Cove, Nova Scotia. Architecture briefing, slide deck, podcast, and photos.">
+  <meta property="og:url" content="https://markusvankempen.github.io/FerryLight-Blog/">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://markusvankempen.github.io/FerryLight-Blog/images/FerryLighSystemOverview.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="FerryLight Blog — Nova Scotia Ferry Tracker">
+  <meta name="twitter:description" content="Community-built real-time ferry status, weather, and events for Cape Breton's North Shore.">
+  <style>
+    :root { color-scheme: dark; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3rem;
+      line-height: 1.6;
+    }
+    h1 { color: #58a6ff; margin-bottom: 0.25rem; }
+    .tagline { color: #8b949e; margin-top: 0; }
+    a { color: #58a6ff; }
+    .cards { display: grid; gap: 1rem; margin: 2rem 0; }
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+    }
+    .card h2 { margin: 0 0 0.5rem; font-size: 1.1rem; color: #7ee787; }
+    .card p { margin: 0 0 0.75rem; color: #8b949e; font-size: 0.95rem; }
+    footer { margin-top: 2rem; font-size: 0.85rem; color: #6e7681; }
+  </style>
+</head>
+<body>
+  <h1>FerryLight Blog</h1>
+  <p class="tagline">Real-time Englishtown ↔ Jersey Cove ferry tracking · Cape Breton community tech · Nova Scotia</p>
+  <p style="color:#8b949e;font-size:0.9rem;margin-top:0.5rem">AIS vessel tracking · PWA · Node-RED · WLED LED display · weather · events · podcast · slides</p>
+
+  <div class="cards">
+    <div class="card" style="border-color:#16c060;">
+      <h2 style="color:#16c060;">⚡ Web Flasher &amp; Firmware (v0.3.28)</h2>
+      <p>Install or update FerryLight firmware on your ESP8266 / Wemos D1 Mini directly from your web browser over USB.</p>
+      <a href="flash/" style="color:#16c060;font-weight:700;">Open Web Flasher &rarr;</a>
+    </div>
+    <div class="card">
+      <h2>📖 Full briefing (Markdown)</h2>
+      <p>Architecture, features, LED display, PWA, and community impact — the complete system overview.</p>
+      <a href="ferrylight-blog.md">Read ferrylight-blog.md</a>
+    </div>
+    <div class="card">
+      <h2>🎬 Slide presentation</h2>
+      <p>Reveal.js deck — use arrow keys to navigate. Great for demos and talks.</p>
+      <a href="ferrylight-presentation.html">Open presentation</a>
+    </div>
+    <div class="card">
+      <h2>🎧 Podcast</h2>
+      <p>Deep dive with Markus on building FerryLight.</p>
+      <a href="assets/FerryLightDeepDivePodcastWithMarkusv1.mp3">Listen / download</a>
+    </div>
+    <div class="card">
+      <h2>📄 PDF</h2>
+      <p>FerryLight: A Digital Lifeline for the North Shore.</p>
+      <a href="assets/FerryLight_Digital_Lifeline_for_the_North_Shore.pdf">Download PDF</a>
+    </div>
+    <div class="card">
+      <h2>🚢 Live app</h2>
+      <p>Real-time ferry status, weather, events, and more.</p>
+      <a href="https://ferrylight.online">ferrylight.online</a>
+    </div>
+  </div>
+
+  <footer>
+    By <a href="https://github.com/markusvankempen">Markus van Kempen</a> ·
+    App repo: <a href="https://github.com/markusvankempen/FerryLight">FerryLight</a>
+  </footer>
+</body>
+</html>
