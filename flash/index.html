@@ -3,21 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Install FerryLight Firmware | Web Serial Flasher</title>
-  <meta name="description" content="Flash or update FerryLight LED Display firmware directly from your browser over Web Serial USB.">
+  <title>FerryLight Quick Setup &amp; Web Flasher | Easy 2-Minute Install</title>
+  <meta name="description" content="Set up your FerryLight live ferry and weather display in 2 minutes right in your browser. Guided Wi-Fi setup, screen orientation test, and automatic installer.">
   <link rel="canonical" href="https://markusvankempen.github.io/FerryLight-Blog/flash/">
   <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
   <style>
     :root {
-      --bg: #08101f;
-      --card: #122040;
-      --border: #243152;
-      --fg: #e8eef8;
-      --mut: #9aa8c0;
+      --bg: #070e1b;
+      --card: #0f1d38;
+      --card-alt: #0a1428;
+      --border: #1e2f52;
+      --fg: #eaf1fb;
+      --mut: #8e9ebc;
       --acc: #00d0ff;
-      --btn: #16c060;
-      --btn-hover: #13a854;
-      --code-bg: #05080f;
+      --acc-glow: rgba(0, 208, 255, 0.25);
+      --btn: #12b85a;
+      --btn-hover: #0ea24e;
+      --btn-blue: #2563eb;
+      --btn-blue-hover: #1d4ed8;
+      --btn-warn: #f59e0b;
+      --btn-warn-hover: #d97706;
+      --success: #10b981;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -25,7 +31,7 @@
       color: var(--fg);
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
       line-height: 1.6;
-      padding: 24px 16px 60px;
+      padding: 24px 16px 80px;
     }
     .container {
       max-width: 680px;
@@ -36,59 +42,363 @@
       margin-bottom: 28px;
     }
     .badge {
-      display: inline-block;
-      font-size: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
       font-weight: 700;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      background: #1a3050;
+      background: #142848;
       color: var(--acc);
-      padding: 4px 12px;
+      padding: 5px 14px;
       border-radius: 999px;
       margin-bottom: 12px;
+      border: 1px solid rgba(0, 208, 255, 0.25);
     }
     h1 {
-      font-size: 1.85rem;
+      font-size: 2rem;
       font-weight: 800;
       color: #fff;
       margin-bottom: 8px;
+      letter-spacing: -0.02em;
     }
     p.lead {
       color: var(--mut);
       font-size: 1.05rem;
     }
+
+    /* 3 Simple Visual Steps Header */
+    .quick-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 20px 0 28px;
+      text-align: center;
+    }
+    .step-pill {
+      background: #0d1a33;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--fg);
+    }
+    .step-pill span {
+      display: block;
+      font-size: 1.25rem;
+      margin-bottom: 4px;
+    }
+
+    /* Main Action Card */
     .card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 28px;
+      border-radius: 18px;
+      padding: 26px 28px;
       margin-bottom: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
       text-align: center;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
     }
-    .btn-flash {
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .card-subtitle {
+      color: var(--mut);
+      font-size: 0.92rem;
+      margin-bottom: 20px;
+    }
+
+    /* Buttons */
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+    .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
+      padding: 14px 24px;
+      border-radius: 12px;
+      border: none;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease-in-out;
+      width: 100%;
+    }
+    .btn:active {
+      transform: scale(0.98);
+    }
+    .btn-flash {
       background: var(--btn);
       color: #ffffff;
-      font-size: 1.1rem;
-      font-weight: 700;
-      padding: 14px 28px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
-      box-shadow: 0 4px 12px rgba(22, 192, 96, 0.35);
+      box-shadow: 0 4px 16px rgba(18, 184, 90, 0.4);
     }
     .btn-flash:hover {
       background: var(--btn-hover);
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(18, 184, 90, 0.5);
     }
-    .btn-flash:active {
-      transform: translateY(0);
+    .btn-wizard {
+      background: var(--btn-blue);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
     }
+    .btn-wizard:hover {
+      background: var(--btn-blue-hover);
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      background: #182848;
+      color: var(--fg);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      background: #223864;
+    }
+    .btn-warn {
+      background: var(--btn-warn);
+      color: #000;
+    }
+    .btn-warn:hover {
+      background: var(--btn-warn-hover);
+    }
+    .btn-sm {
+      padding: 8px 14px;
+      font-size: 0.88rem;
+      border-radius: 8px;
+    }
+
+    /* Advanced Options Accordion */
+    details.advanced-box {
+      margin-top: 22px;
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+      text-align: left;
+    }
+    details.advanced-box summary {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--mut);
+      cursor: pointer;
+      user-select: none;
+      padding: 4px 0;
+    }
+    details.advanced-box summary:hover {
+      color: var(--acc);
+    }
+    .advanced-content {
+      background: #081122;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-top: 12px;
+    }
+    .advanced-content label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--mut);
+      margin-bottom: 6px;
+    }
+    .form-select, .form-input {
+      width: 100%;
+      background: #0c1830;
+      color: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 0.92rem;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .form-select:focus, .form-input:focus {
+      border-color: var(--acc);
+    }
+    .erase-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: var(--mut);
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    /* Guided Setup Wizard Card */
+    .wizard-card {
+      background: linear-gradient(180deg, #12244c 0%, #0c1834 100%);
+      border: 2px solid var(--acc);
+      border-radius: 18px;
+      padding: 26px 28px;
+      margin-bottom: 24px;
+      box-shadow: 0 12px 36px rgba(0, 208, 255, 0.18);
+      text-align: left;
+    }
+    .wizard-progress {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      position: relative;
+    }
+    .wizard-progress::before {
+      content: '';
+      position: absolute;
+      top: 15px;
+      left: 10%;
+      right: 10%;
+      height: 2px;
+      background: var(--border);
+      z-index: 1;
+    }
+    .prog-step {
+      position: relative;
+      z-index: 2;
+      background: var(--card-alt);
+      border: 2px solid var(--border);
+      color: var(--mut);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.88rem;
+      transition: all 0.2s;
+    }
+    .prog-step.active {
+      border-color: var(--acc);
+      background: var(--acc);
+      color: #000;
+      box-shadow: 0 0 12px var(--acc);
+    }
+    .prog-step.done {
+      border-color: var(--success);
+      background: var(--success);
+      color: #fff;
+    }
+
+    .wizard-body {
+      background: var(--card-alt);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+    .wizard-body h3 {
+      font-size: 1.2rem;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .wizard-body p {
+      color: var(--mut);
+      font-size: 0.95rem;
+      margin-bottom: 16px;
+    }
+    .screen-preview {
+      background: #020408;
+      border: 2px solid #1a2c4e;
+      border-radius: 10px;
+      padding: 16px;
+      font-family: monospace;
+      color: #00d0ff;
+      font-size: 1.3rem;
+      text-align: center;
+      letter-spacing: 0.15em;
+      margin-bottom: 18px;
+      box-shadow: inset 0 0 12px rgba(0,208,255,0.25);
+      transition: transform 0.3s ease;
+    }
+    .screen-preview.upside-down {
+      transform: rotate(180deg);
+    }
+    .tip-box {
+      background: rgba(0, 208, 255, 0.08);
+      border-left: 3px solid var(--acc);
+      padding: 12px 14px;
+      font-size: 0.88rem;
+      color: var(--fg);
+      border-radius: 0 8px 8px 0;
+      margin-top: 14px;
+    }
+
+    /* Success Card */
+    .success-banner {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      border-radius: 14px;
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .success-banner h2 {
+      color: #34d399;
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+    }
+    .ip-box {
+      display: inline-block;
+      background: #050c18;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 1.25rem;
+      font-family: monospace;
+      color: var(--acc);
+      margin: 12px 0;
+    }
+
+    /* FAQ Guidance */
+    .faq-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 24px 28px;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+    .faq-card h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    .faq-item {
+      margin-bottom: 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding-bottom: 12px;
+    }
+    .faq-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .faq-q {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .faq-a {
+      font-size: 0.88rem;
+      color: var(--mut);
+    }
+
     .unsupported, .not-allowed {
       display: block;
       margin-top: 14px;
@@ -99,62 +409,33 @@
       border-radius: 8px;
       border: 1px solid rgba(248, 113, 113, 0.2);
     }
-    .steps {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 24px;
-      text-align: left;
-    }
-    .steps h2 {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 16px;
-    }
-    ol {
-      padding-left: 20px;
-      color: var(--fg);
-    }
-    ol li {
-      margin-bottom: 12px;
-      padding-left: 4px;
-    }
-    ol li strong {
-      color: #fff;
-    }
-    .note {
-      font-size: 0.85rem;
-      color: var(--mut);
-      margin-top: 4px;
-    }
+
     .links {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
       justify-content: center;
-      margin-top: 24px;
+      margin-top: 28px;
     }
     .links a {
       color: var(--acc);
       text-decoration: none;
       font-size: 0.9rem;
       font-weight: 600;
-      background: #1a3050;
+      background: #142848;
       padding: 8px 16px;
       border-radius: 8px;
       border: 1px solid var(--border);
       transition: background 0.15s, border-color 0.15s;
     }
     .links a:hover {
-      background: #243a60;
+      background: #1e3864;
       border-color: var(--acc);
     }
     footer {
       text-align: center;
       color: var(--mut);
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       margin-top: 40px;
     }
   </style>
@@ -162,59 +443,535 @@
 <body>
   <div class="container">
     <header>
-      <div class="badge">FerryLight v0.3.28</div>
-      <h1>FerryLight Web Flasher</h1>
-      <p class="lead">Install or update FerryLight firmware on your ESP8266 / Wemos D1 Mini directly from your web browser over USB.</p>
+      <div class="badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span id="verBadge">FerryLight Firmware Installer</span>
+      </div>
+      <h1>FerryLight Web Flasher &amp; Setup</h1>
+      <p class="lead">Connect your FerryLight LED display to your computer with USB and set up live ferry tracking in your web browser.</p>
+
+      <div class="quick-steps">
+        <div class="step-pill">
+          <span>🔌</span>
+          1. Plug into USB
+        </div>
+        <div class="step-pill">
+          <span>⚡</span>
+          2. Click Install
+        </div>
+        <div class="step-pill">
+          <span>📶</span>
+          3. Enter Wi-Fi
+        </div>
+      </div>
     </header>
 
-    <div class="card">
-      <esp-web-install-button manifest="manifest.json">
-        <button slot="activate" class="btn-flash">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2v10M18 8l-6 6-6-6M4 20h16"/>
+    <!-- Main Flash / Wizard Options Card -->
+    <div class="card" id="flashCard">
+      <div class="card-title">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Ready to Install?
+      </div>
+      <p class="card-subtitle">Plug your display into your computer USB port, then choose an option below:</p>
+
+      <div class="btn-group">
+        <esp-web-install-button id="installBtn" manifest="manifest.json">
+          <button slot="activate" class="btn btn-flash">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v10M18 8l-6 6-6-6M4 20h16"/>
+            </svg>
+            1. Install FerryLight on Display
+          </button>
+          <span slot="unsupported" class="unsupported">
+            Your browser does not support Web Serial. Please use Google Chrome, Microsoft Edge, Opera, or Brave on a desktop or laptop computer.
+          </span>
+          <span slot="not-allowed" class="not-allowed">
+            Web Serial requires HTTPS. Ensure you are visiting this page via HTTPS.
+          </span>
+        </esp-web-install-button>
+
+        <button class="btn btn-wizard" id="startWizardBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
           </svg>
-          Connect &amp; Install FerryLight
+          2. Quick Setup Wizard (Wi-Fi &amp; Orientation)
         </button>
-        <span slot="unsupported" class="unsupported">
-          Your browser does not support Web Serial. Please use Google Chrome, Microsoft Edge, Opera, or Brave on desktop.
-        </span>
-        <span slot="not-allowed" class="not-allowed">
-          Web Serial requires HTTPS or localhost. Ensure you are visiting this page via HTTPS.
-        </span>
-      </esp-web-install-button>
-      <p class="note" style="margin-top: 14px;">No drivers, Python, or command-line tools needed.</p>
+      </div>
+
+      <!-- Advanced Technical Options (Hidden by default for simplicity) -->
+      <details class="advanced-box">
+        <summary>⚙️ Advanced Options (Firmware Version &amp; Clean Wipe)</summary>
+        <div class="advanced-content">
+          <label for="verSelect">Choose Firmware Release:</label>
+          <select id="verSelect" class="form-select">
+            <optgroup label="Latest / Recommended">
+              <option value="latest" selected>v0.3.29 (Latest — Recommended)</option>
+            </optgroup>
+            <optgroup label="Recent Releases">
+              <option value="v0.3.29">v0.3.29 — Default Wi-Fi, thin font &amp; 180° rotation</option>
+              <option value="v0.3.28">v0.3.28 — Zero-leak Web preview, PROGMEM alerts &amp; frame deduplication</option>
+              <option value="v0.3.27">v0.3.27</option>
+              <option value="v0.3.26">v0.3.26</option>
+              <option value="v0.3.25">v0.3.25</option>
+              <option value="v0.3.24">v0.3.24</option>
+              <option value="v0.3.23">v0.3.23</option>
+              <option value="v0.3.22">v0.3.22</option>
+              <option value="v0.3.21">v0.3.21</option>
+              <option value="v0.3.20">v0.3.20</option>
+            </optgroup>
+            <optgroup label="Previous Versions">
+              <option value="v0.3.19">v0.3.19</option>
+              <option value="v0.3.18">v0.3.18</option>
+              <option value="v0.3.17">v0.3.17</option>
+              <option value="v0.3.16">v0.3.16</option>
+              <option value="v0.3.15">v0.3.15</option>
+              <option value="v0.3.14">v0.3.14</option>
+              <option value="v0.3.13">v0.3.13</option>
+              <option value="v0.3.12">v0.3.12</option>
+              <option value="v0.3.11">v0.3.11</option>
+              <option value="v0.3.10">v0.3.10</option>
+              <option value="v0.3.9">v0.3.9</option>
+              <option value="v0.3.8">v0.3.8</option>
+              <option value="v0.3.7">v0.3.7</option>
+              <option value="v0.3.6">v0.3.6</option>
+              <option value="v0.3.5">v0.3.5</option>
+              <option value="v0.3.1">v0.3.1</option>
+            </optgroup>
+          </select>
+
+          <label class="erase-toggle">
+            <input type="checkbox" id="eraseCheck"> Erase all settings and perform clean install
+          </label>
+        </div>
+      </details>
     </div>
 
-    <div class="steps">
-      <h2>How to Flash Your Display</h2>
-      <ol>
-        <li>
-          <strong>Connect ESP8266 via USB:</strong> Plug your Wemos D1 Mini or NodeMCU board into your computer with a USB data cable.
-        </li>
-        <li>
-          <strong>Click "Connect &amp; Install FerryLight":</strong> A browser dialog will appear listing available USB serial devices.
-        </li>
-        <li>
-          <strong>Select Your Serial Port:</strong> Choose your board's COM / USB serial port (e.g. <code>USB Serial</code>, <code>ch341-uart</code>, or <code>CP2102</code>) and click <em>Connect</em>.
-        </li>
-        <li>
-          <strong>Wait for Flashing to Complete:</strong> The installer will erase and write the firmware binary, then reset the board.
-        </li>
-        <li>
-          <strong>Wi-Fi Setup:</strong> Once flashed, join the open Wi-Fi network <code>FerryLight-...</code> on your phone/computer and open <a href="http://192.168.4.1" target="_blank" style="color:var(--acc);">http://192.168.4.1</a> to configure your home Wi-Fi and MQTT.
-        </li>
-      </ol>
+    <!-- Step-by-Step Guided Setup Wizard Card -->
+    <div class="wizard-card" id="wizardCard" style="display: none;">
+      <div class="card-title" style="justify-content: flex-start;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        FerryLight Setup Wizard
+      </div>
+
+      <div class="wizard-progress">
+        <div class="prog-step active" id="prog1">1</div>
+        <div class="prog-step" id="prog2">2</div>
+        <div class="prog-step" id="prog3">3</div>
+        <div class="prog-step" id="prog4">✓</div>
+      </div>
+
+      <!-- Step 1: Display Test -->
+      <div id="step1Box" class="wizard-body">
+        <h3>Step 1: Is your screen lighting up?</h3>
+        <p>We just sent a live test message to your LED board. Check your screen now:</p>
+        
+        <div class="screen-preview" id="screenPreviewText">HELLO FERRYLIGHT</div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+          <button class="btn btn-flash" id="step1YesBtn" style="width: auto;">✅ Yes, I see text!</button>
+          <button class="btn btn-secondary" id="step1RetestBtn" style="width: auto;">🔄 Test Again</button>
+          <button class="btn btn-warn btn-sm" id="step1DarkBtn" style="width: auto;">❓ Nothing is showing</button>
+        </div>
+
+        <div class="tip-box" id="step1DarkTip" style="display: none;">
+          <strong>Quick Troubleshooting:</strong><br>
+          • Make sure your USB cable is a <strong>Data cable</strong> (some thin charging cables cannot transfer data).<br>
+          • Check that the LED display green Data wire is connected to pin <strong>D4</strong>.<br>
+          • Check that 5V (Red) and GND (White/Black) wires are securely connected.
+        </div>
+      </div>
+
+      <!-- Step 2: Orientation Check -->
+      <div id="step2Box" class="wizard-body" style="display: none;">
+        <h3>Step 2: Is the text upside down?</h3>
+        <p>Look at the text scrolling across your display right now on your desk.</p>
+
+        <div class="screen-preview" id="screenPreviewOrient">HELLO FERRYLIGHT</div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+          <button class="btn btn-flash" id="step2RightBtn" style="width: auto;">✅ Looks right side up!</button>
+          <button class="btn btn-warn" id="step2FlipBtn" style="width: auto;">🔄 It's upside down! (Flip 180°)</button>
+        </div>
+
+        <div class="tip-box" id="step2FlippedMsg" style="display: none; color: #34d399;">
+          ✨ <strong>Screen flipped!</strong> We rotated your display 180°. Does it look right now?
+        </div>
+      </div>
+
+      <!-- Step 3: Wi-Fi Setup -->
+      <div id="step3Box" class="wizard-body" style="display: none;">
+        <h3>Step 3: Connect to your Home Wi-Fi</h3>
+        <p>Your FerryLight will connect directly to your home network to get live ferry schedules &amp; weather.</p>
+
+        <div style="margin-bottom: 14px;">
+          <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px;" for="wifiSsid">Wi-Fi Network Name (SSID):</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="wifiSsid" class="form-input" placeholder="e.g. MyHomeWiFi">
+            <button class="btn btn-secondary btn-sm" id="scanWifiBtn" style="width: auto;">📡 Scan</button>
+          </div>
+          <select id="wifiScanSelect" class="form-select" style="display: none; margin-top: 8px;">
+            <option value="">-- Select Detected Network --</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px;" for="wifiPass">Wi-Fi Password:</label>
+          <input type="password" id="wifiPass" class="form-input" placeholder="Enter Wi-Fi password (or leave blank if open)">
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px;">
+          <button class="btn btn-flash" id="saveWifiBtn" style="width: auto;">🚀 Connect FerryLight to Wi-Fi</button>
+          <button class="btn btn-secondary btn-sm" id="skipWifiBtn" style="width: auto;">Skip for now</button>
+        </div>
+
+        <div id="wifiStatusMsg" style="margin-top: 14px; font-weight: 600; color: var(--acc); display: none;">
+          Connecting to Wi-Fi... Please wait a few seconds...
+        </div>
+      </div>
+
+      <!-- Step 4: Finished / Launch Dashboard -->
+      <div id="step4Box" class="wizard-body" style="display: none;">
+        <div class="success-banner">
+          <h2>🎉 Your FerryLight is Online!</h2>
+          <p style="color: var(--fg); margin-bottom: 8px;">Your display is connected to your Wi-Fi network and ready to use.</p>
+          <div class="ip-box" id="deviceIpDisplay">http://192.168.0.xxx</div>
+          <br>
+          <a class="btn btn-flash" id="openUiBtn" href="#" target="_blank" style="margin-top: 12px; font-size: 1.1rem; padding: 14px 28px; width: auto; display: inline-flex;">
+            🚀 Open FerryLight Dashboard
+          </a>
+        </div>
+
+        <div style="text-align: center;">
+          <button class="btn btn-secondary btn-sm" id="wizardDoneBtn" style="width: auto;">Done / Disconnect USB</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Friendly Guidance & FAQ -->
+    <div class="faq-card">
+      <h2>Frequently Asked Questions</h2>
+      
+      <div class="faq-item">
+        <div class="faq-q">❓ What kind of USB cable do I need?</div>
+        <div class="faq-a">Use a standard micro-USB or USB-C <strong>data cable</strong>. Some thin cables from charging stations are power-only and cannot transfer data.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">❓ Do I need to install any software or drivers?</div>
+        <div class="faq-a">No! Everything runs 100% inside your browser using Google Chrome, Microsoft Edge, Brave, or Opera on Windows, Mac, Linux, or Chromebooks.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">❓ How do future updates work?</div>
+        <div class="faq-a">Once your FerryLight is connected to your home Wi-Fi, it will automatically check for and install updates over the air without needing USB again.</div>
+      </div>
     </div>
 
     <div class="links">
-      <a href="firmware.bin" download>📥 Download firmware.bin</a>
+      <a id="dlBtn" href="../firmware/esp8266/latest/firmware.bin" download>📥 Download firmware.bin</a>
       <a href="../" target="_blank">🏠 FerryLight Blog Home</a>
-      <a href="https://github.com/markusvankempen/FerryLight-Blog" target="_blank">⭐ GitHub Repository</a>
+      <a href="https://github.com/markusvankempen/FerryLight-Blog" target="_blank">📂 GitHub Repository</a>
     </div>
 
     <footer>
       FerryLight LED Display &bull; Created by Markus van Kempen &bull; Open Source
     </footer>
   </div>
+
+  <script>
+    // --- Firmware Installer logic ---
+    const verSelect = document.getElementById('verSelect');
+    const eraseCheck = document.getElementById('eraseCheck');
+    const installBtn = document.getElementById('installBtn');
+    const verBadge = document.getElementById('verBadge');
+    const dlBtn = document.getElementById('dlBtn');
+
+    let currentBlobUrl = null;
+
+    function updateInstaller() {
+      const ver = verSelect.value;
+      const isLatest = (ver === 'latest');
+      const verTag = isLatest ? 'v0.3.29' : ver;
+      const binRel = isLatest 
+        ? '../firmware/esp8266/latest/firmware.bin'
+        : `../firmware/esp8266/${ver}/firmware.bin`;
+      
+      const absBinUrl = new URL(binRel, window.location.href).href;
+      
+      if (verBadge) verBadge.textContent = `FerryLight ${verTag}${isLatest ? ' (Latest)' : ''}`;
+      if (dlBtn) {
+        dlBtn.href = absBinUrl;
+        dlBtn.setAttribute('download', `ferrylight-${verTag}.bin`);
+        dlBtn.textContent = `📥 Download ferrylight-${verTag}.bin`;
+      }
+
+      const manifest = {
+        name: "FerryLight LED Display",
+        version: verTag,
+        new_install_prompt_erase: !!eraseCheck.checked,
+        builds: [
+          {
+            chipFamily: "ESP8266",
+            parts: [
+              { path: absBinUrl, offset: 0 }
+            ]
+          }
+        ]
+      };
+
+      if (currentBlobUrl) {
+        URL.revokeObjectURL(currentBlobUrl);
+      }
+
+      const blob = new Blob([JSON.stringify(manifest, null, 2)], { type: 'application/json' });
+      currentBlobUrl = URL.createObjectURL(blob);
+      installBtn.setAttribute('manifest', currentBlobUrl);
+    }
+
+    verSelect.addEventListener('change', updateInstaller);
+    eraseCheck.addEventListener('change', updateInstaller);
+    updateInstaller();
+
+    // --- Web Serial Setup Wizard ---
+    let port = null;
+    let reader = null;
+    let writer = null;
+    let keepReading = false;
+    let serialBuffer = '';
+    let foundIp = null;
+    let isFlipped = false;
+
+    const startWizardBtn = document.getElementById('startWizardBtn');
+    const wizardCard = document.getElementById('wizardCard');
+    const step1Box = document.getElementById('step1Box');
+    const step2Box = document.getElementById('step2Box');
+    const step3Box = document.getElementById('step3Box');
+    const step4Box = document.getElementById('step4Box');
+
+    const prog1 = document.getElementById('prog1');
+    const prog2 = document.getElementById('prog2');
+    const prog3 = document.getElementById('prog3');
+    const prog4 = document.getElementById('prog4');
+
+    async function ensureSerialConnected() {
+      if (port && port.readable && port.writable) return true;
+      if (!('serial' in navigator)) {
+        alert("Web Serial is not supported in this browser. Please use Google Chrome, Microsoft Edge, Opera, or Brave on desktop.");
+        return false;
+      }
+      try {
+        port = await navigator.serial.requestPort();
+        await port.open({ baudRate: 115200 });
+        keepReading = true;
+        readSerialLoop();
+        return true;
+      } catch (err) {
+        console.error("USB Serial error:", err);
+        return false;
+      }
+    }
+
+    async function sendCmd(cmd) {
+      if (!port || !port.writable) return;
+      const enc = new TextEncoder();
+      const w = port.writable.getWriter();
+      await w.write(enc.encode(cmd + "\n"));
+      w.releaseLock();
+    }
+
+    async function readSerialLoop() {
+      const dec = new TextDecoderStream();
+      port.readable.pipeTo(dec.writable).catch(() => {});
+      const r = dec.readable.getReader();
+      reader = r;
+      try {
+        while (keepReading) {
+          const { value, done } = await r.read();
+          if (done) break;
+          if (value) {
+            serialBuffer += value;
+            let lines = serialBuffer.split(/\r?\n/);
+            serialBuffer = lines.pop();
+            for (let line of lines) {
+              handleSerialLine(line.trim());
+            }
+          }
+        }
+      } catch (e) {
+        console.warn("Serial closed:", e);
+      } finally {
+        r.releaseLock();
+      }
+    }
+
+    function handleSerialLine(line) {
+      if (!line) return;
+      console.log("ESP8266 ->", line);
+
+      // Check for IP address
+      const ipMatch = line.match(/(?:IP\s+|IP Address:\s+|Station:\s+.*?\s+)([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})/i);
+      if (ipMatch && ipMatch[1] && ipMatch[1] !== '192.168.4.1' && ipMatch[1] !== '0.0.0.0') {
+        foundIp = ipMatch[1];
+        onIpDiscovered(foundIp);
+      }
+
+      // Check for scan network lines (e.g. -58 dBm  MySSID *)
+      if (line.includes('dBm')) {
+        const scanMatch = line.match(/-?\d+\s+dBm\s+([^\*]+)/);
+        if (scanMatch && scanMatch[1]) {
+          const ssid = scanMatch[1].trim();
+          addScannedSsid(ssid);
+        }
+      }
+    }
+
+    function addScannedSsid(ssid) {
+      const sel = document.getElementById('wifiScanSelect');
+      sel.style.display = 'block';
+      for (let opt of sel.options) {
+        if (opt.value === ssid) return;
+      }
+      const opt = document.createElement('option');
+      opt.value = ssid;
+      opt.textContent = `📶 ${ssid}`;
+      sel.appendChild(opt);
+    }
+
+    function setStep(step) {
+      step1Box.style.display = (step === 1) ? 'block' : 'none';
+      step2Box.style.display = (step === 2) ? 'block' : 'none';
+      step3Box.style.display = (step === 3) ? 'block' : 'none';
+      step4Box.style.display = (step === 4) ? 'block' : 'none';
+
+      prog1.className = 'prog-step ' + (step === 1 ? 'active' : (step > 1 ? 'done' : ''));
+      prog2.className = 'prog-step ' + (step === 2 ? 'active' : (step > 2 ? 'done' : ''));
+      prog3.className = 'prog-step ' + (step === 3 ? 'active' : (step > 3 ? 'done' : ''));
+      prog4.className = 'prog-step ' + (step === 4 ? 'active done' : '');
+    }
+
+    startWizardBtn.addEventListener('click', async () => {
+      const ok = await ensureSerialConnected();
+      if (!ok) return;
+
+      wizardCard.style.display = 'block';
+      wizardCard.scrollIntoView({ behavior: 'smooth' });
+      setStep(1);
+
+      // Send initial test message
+      setTimeout(() => {
+        sendCmd('bright 30');
+        sendCmd('on');
+        sendCmd('color #00D0FF');
+        sendCmd('text Hello FerryLight');
+      }, 500);
+    });
+
+    // Step 1: Text Check
+    document.getElementById('step1YesBtn').addEventListener('click', () => {
+      setStep(2);
+      sendCmd('text HELLO FERRYLIGHT');
+    });
+
+    document.getElementById('step1RetestBtn').addEventListener('click', () => {
+      sendCmd('bright 30');
+      sendCmd('on');
+      sendCmd('color #00D0FF');
+      sendCmd('text Hello FerryLight');
+    });
+
+    document.getElementById('step1DarkBtn').addEventListener('click', () => {
+      const tip = document.getElementById('step1DarkTip');
+      tip.style.display = tip.style.display === 'none' ? 'block' : 'none';
+      sendCmd('bright 40');
+      sendCmd('on');
+      sendCmd('text HELLO FERRYLIGHT');
+    });
+
+    // Step 2: Orientation Check
+    document.getElementById('step2RightBtn').addEventListener('click', () => {
+      setStep(3);
+    });
+
+    document.getElementById('step2FlipBtn').addEventListener('click', () => {
+      isFlipped = !isFlipped;
+      sendCmd('rotate');
+      sendCmd('text HELLO FERRYLIGHT');
+      document.getElementById('screenPreviewOrient').classList.toggle('upside-down', isFlipped);
+      document.getElementById('step2FlippedMsg').style.display = 'block';
+    });
+
+    // Step 3: Wi-Fi Setup
+    document.getElementById('scanWifiBtn').addEventListener('click', () => {
+      const sel = document.getElementById('wifiScanSelect');
+      sel.innerHTML = '<option value="">-- Scanning nearby networks... --</option>';
+      sel.style.display = 'block';
+      sendCmd('scan');
+    });
+
+    document.getElementById('wifiScanSelect').addEventListener('change', (e) => {
+      if (e.target.value) {
+        document.getElementById('wifiSsid').value = e.target.value;
+      }
+    });
+
+    document.getElementById('saveWifiBtn').addEventListener('click', () => {
+      const ssid = document.getElementById('wifiSsid').value.trim();
+      const pass = document.getElementById('wifiPass').value.trim();
+
+      if (!ssid) {
+        alert("Please enter or select your Wi-Fi Network Name (SSID).");
+        return;
+      }
+
+      const statusMsg = document.getElementById('wifiStatusMsg');
+      statusMsg.style.display = 'block';
+      statusMsg.textContent = `Saving credentials and connecting to ${ssid}...`;
+
+      sendCmd(`wifi "${ssid}" ${pass}`);
+      setTimeout(() => {
+        sendCmd('reboot');
+      }, 600);
+
+      // Poll IP after reboot
+      let attempts = 0;
+      const pollTimer = setInterval(() => {
+        attempts++;
+        if (foundIp) {
+          clearInterval(pollTimer);
+          return;
+        }
+        sendCmd('ip');
+        if (attempts > 18) {
+          clearInterval(pollTimer);
+          // If not found yet, default to ferrylight.local
+          onIpDiscovered('ferrylight.local');
+        }
+      }, 1500);
+    });
+
+    document.getElementById('skipWifiBtn').addEventListener('click', () => {
+      onIpDiscovered('192.168.4.1');
+    });
+
+    function onIpDiscovered(ip) {
+      setStep(4);
+      const hostUrl = ip.startsWith('http') ? ip : `http://${ip}/`;
+      document.getElementById('deviceIpDisplay').textContent = hostUrl;
+      document.getElementById('openUiBtn').href = hostUrl;
+    }
+
+    document.getElementById('wizardDoneBtn').addEventListener('click', async () => {
+      keepReading = false;
+      if (reader) {
+        try { await reader.cancel(); } catch(e){}
+      }
+      if (port) {
+        try { await port.close(); } catch(e){}
+      }
+      port = null;
+      wizardCard.style.display = 'none';
+      alert("Setup complete! Your FerryLight is ready.");
+    });
+  </script>
 </body>
 </html>

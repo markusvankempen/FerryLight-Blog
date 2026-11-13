@@ -1,8 +1,13 @@
 {
-  "version": "0.3.28",
-  "url": "https://raw.githubusercontent.com/markusvankempen/FerryLight-Blog/main/firmware/esp8266/latest/firmware.bin",
-  "md5": "67a3df5c3bd7c920fc63a0047665f710",
-  "size": 684912,
-  "chip": "esp8266",
-  "board": "d1_mini"
+  "name": "FerryLight LED Display",
+  "version": "0.3.29",
+  "new_install_prompt_erase": false,
+  "builds": [
+    {
+      "chipFamily": "ESP8266",
+      "parts": [
+        { "path": "firmware.bin", "offset": 0 }
+      ]
+    }
+  ]
 }
