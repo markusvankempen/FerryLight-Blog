@@ -3,86 +3,538 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FerryLight Blog — Englishtown Ferry Tracker | Nova Scotia Community Tech</title>
-  <meta name="description" content="FerryLight blog: real-time Englishtown ↔ Jersey Cove ferry tracking, Cape Breton community app, AIS vessel tracking, PWA, Node-RED, WLED LED display, weather & events. System briefing, slides, podcast & PDF.">
-  <meta name="keywords" content="FerryLight, Englishtown ferry, Jersey Cove ferry, Nova Scotia ferry, Cape Breton, St Ann's Loop, AIS tracking, ferry wait time, PWA, Node-RED, community app, Victoria County, North Shore NS, vessel tracking, WLED, IoT, weather station">
+  <title>FerryLight — Real-Time Englishtown Ferry Tracker &amp; Community IoT</title>
+  <meta name="description" content="FerryLight: Real-time Englishtown ↔ Jersey Cove ferry tracking, DIY AIS receiver, WLED smart matrix displays, hyperlocal weather, and community hub for Cape Breton, Nova Scotia.">
+  <meta name="keywords" content="FerryLight, Englishtown ferry, Jersey Cove ferry, Nova Scotia ferry, Cape Breton, St Ann's Loop, AIS tracking, ferry wait time, PWA, Node-RED, community app, Victoria County, North Shore NS, vessel tracking, WLED, ESP8266, IoT, weather station">
   <meta name="author" content="Markus van Kempen">
   <link rel="canonical" href="https://markusvankempen.github.io/FerryLight-Blog/">
-  <meta property="og:title" content="FerryLight Blog — A Digital Lifeline for the North Shore">
-  <meta property="og:description" content="Real-time ferry tracking for Englishtown ↔ Jersey Cove, Nova Scotia. Architecture briefing, slide deck, podcast, and photos.">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="FerryLight — A Digital Lifeline for the North Shore">
+  <meta property="og:description" content="Real-time ferry tracking, DIY AIS vessel monitoring, and smart LED displays for Englishtown ↔ Jersey Cove, Cape Breton, Nova Scotia.">
   <meta property="og:url" content="https://markusvankempen.github.io/FerryLight-Blog/">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://markusvankempen.github.io/FerryLight-Blog/images/FerryLighSystemOverview.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="FerryLight Blog — Nova Scotia Ferry Tracker">
-  <meta name="twitter:description" content="Community-built real-time ferry status, weather, and events for Cape Breton's North Shore.">
+  
   <style>
-    :root { color-scheme: dark; }
+    :root {
+      --bg: #070e1b;
+      --card: #0f1c36;
+      --card-alt: #0a1326;
+      --border: #1b2c4e;
+      --fg: #e8f0fe;
+      --mut: #8fa1c0;
+      --acc: #00d0ff;
+      --acc-glow: rgba(0, 208, 255, 0.25);
+      --btn-green: #12b85a;
+      --btn-green-hover: #0ea24e;
+      --btn-blue: #2563eb;
+      --btn-blue-hover: #1d4ed8;
+      --badge-bg: #132448;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background: #0d1117;
-      color: #e6edf3;
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 2rem 1.25rem 3rem;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
       line-height: 1.6;
+      padding: 0 16px 80px;
     }
-    h1 { color: #58a6ff; margin-bottom: 0.25rem; }
-    .tagline { color: #8b949e; margin-top: 0; }
-    a { color: #58a6ff; }
-    .cards { display: grid; gap: 1rem; margin: 2rem 0; }
-    .card {
-      background: #161b22;
-      border: 1px solid #30363d;
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Hero Section */
+    header.hero {
+      text-align: center;
+      padding: 48px 16px 36px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 36px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--badge-bg);
+      color: var(--acc);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 208, 255, 0.3);
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: clamp(2rem, 5vw, 2.85rem);
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+    h1 span {
+      background: linear-gradient(135deg, #00d0ff 0%, #12b85a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p.lead {
+      font-size: 1.15rem;
+      color: var(--mut);
+      max-width: 720px;
+      margin: 0 auto 24px;
+    }
+
+    /* Action Buttons */
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 22px;
       border-radius: 12px;
-      padding: 1.25rem 1.5rem;
+      font-size: 0.98rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.15s ease-in-out;
+      border: none;
+      cursor: pointer;
     }
-    .card h2 { margin: 0 0 0.5rem; font-size: 1.1rem; color: #7ee787; }
-    .card p { margin: 0 0 0.75rem; color: #8b949e; font-size: 0.95rem; }
-    footer { margin-top: 2rem; font-size: 0.85rem; color: #6e7681; }
+    .btn-primary {
+      background: var(--btn-green);
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(18, 184, 90, 0.4);
+    }
+    .btn-primary:hover {
+      background: var(--btn-green-hover);
+      transform: translateY(-2px);
+    }
+    .btn-wizard {
+      background: var(--btn-blue);
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35);
+    }
+    .btn-wizard:hover {
+      background: var(--btn-blue-hover);
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      background: #14223d;
+      color: var(--fg);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      background: #1e335a;
+      border-color: var(--acc);
+    }
+
+    /* Section Styles */
+    section {
+      margin-bottom: 44px;
+    }
+    .section-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-subtitle {
+      color: var(--mut);
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+    }
+
+    /* Featured Hero Banner Card */
+    .featured-card {
+      background: linear-gradient(180deg, #12244a 0%, #0d1a36 100%);
+      border: 2px solid var(--acc);
+      border-radius: 18px;
+      padding: 24px 28px;
+      margin-bottom: 32px;
+      box-shadow: 0 10px 30px rgba(0, 208, 255, 0.15);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: center;
+    }
+    @media (max-width: 680px) {
+      .featured-card { grid-template-columns: 1fr; }
+    }
+    .featured-card h2 {
+      font-size: 1.35rem;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .featured-card p {
+      color: var(--mut);
+      font-size: 0.95rem;
+    }
+
+    /* Feature Grid */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 16px;
+    }
+    @media (max-width: 480px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    .card:hover {
+      border-color: rgba(0, 208, 255, 0.4);
+      transform: translateY(-2px);
+    }
+    .card-icon {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+    .card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .card p {
+      font-size: 0.9rem;
+      color: var(--mut);
+      line-height: 1.5;
+    }
+
+    /* Gallery / Visual Cards */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .photo-card {
+      background: var(--card-alt);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .photo-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+    }
+    .photo-card .caption {
+      padding: 12px 14px;
+      font-size: 0.85rem;
+      color: var(--mut);
+      font-weight: 600;
+    }
+
+    /* Audio Player Box */
+    .audio-box {
+      background: #091428;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 22px;
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    @media (max-width: 600px) {
+      .audio-box { flex-direction: column; align-items: stretch; }
+    }
+    .audio-box audio {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    /* Stats Banner */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      background: var(--card-alt);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px 12px;
+      margin: 28px 0;
+      text-align: center;
+    }
+    @media (max-width: 600px) {
+      .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    }
+    .stat-val {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--acc);
+    }
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--mut);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding-top: 28px;
+      margin-top: 50px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--mut);
+    }
+    footer a {
+      color: var(--acc);
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
-  <h1>FerryLight Blog</h1>
-  <p class="tagline">Real-time Englishtown ↔ Jersey Cove ferry tracking · Cape Breton community tech · Nova Scotia</p>
-  <p style="color:#8b949e;font-size:0.9rem;margin-top:0.5rem">AIS vessel tracking · PWA · Node-RED · WLED LED display · weather · events · podcast · slides</p>
+  <div class="container">
+    <!-- Hero Header -->
+    <header class="hero">
+      <div class="badge">
+        <span>🚢</span> Cape Breton Community Tech
+      </div>
+      <h1>FerryLight: <span>A Digital Lifeline for the North Shore</span></h1>
+      <p class="lead">Real-time Englishtown ↔ Jersey Cove ferry tracking, DIY AIS vessel receiver, smart LED matrix displays, and community IoT hub for Victoria County, Nova Scotia.</p>
+      
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="https://ferrylight.online" target="_blank">
+          🚢 Open Live App (ferrylight.online)
+        </a>
+        <a class="btn btn-wizard" href="flash/">
+          ⚡ Web Flasher &amp; USB Setup
+        </a>
+        <a class="btn btn-secondary" href="ferrylight-blog.md">
+          📖 Full Architecture Briefing
+        </a>
+      </div>
+    </header>
 
-  <div class="cards">
-    <div class="card" style="border-color:#16c060;">
-      <h2 style="color:#16c060;">⚡ Web Flasher &amp; Firmware (v0.3.28)</h2>
-      <p>Install or update FerryLight firmware on your ESP8266 / Wemos D1 Mini directly from your web browser over USB.</p>
-      <a href="flash/" style="color:#16c060;font-weight:700;">Open Web Flasher &rarr;</a>
+    <!-- Key Metrics / Stats Bar -->
+    <div class="stats-bar">
+      <div>
+        <div class="stat-val">3–5 min</div>
+        <div class="stat-label">Ferry Crossing</div>
+      </div>
+      <div>
+        <div class="stat-val">25 min</div>
+        <div class="stat-label">St. Ann's Loop Detour</div>
+      </div>
+      <div>
+        <div class="stat-val">AIS / SDR</div>
+        <div class="stat-label">Live Vessel Radio</div>
+      </div>
+      <div>
+        <div class="stat-val">ESP8266</div>
+        <div class="stat-label">Smart LED Displays</div>
+      </div>
     </div>
-    <div class="card">
-      <h2>📖 Full briefing (Markdown)</h2>
-      <p>Architecture, features, LED display, PWA, and community impact — the complete system overview.</p>
-      <a href="ferrylight-blog.md">Read ferrylight-blog.md</a>
+
+    <!-- Featured Flasher Hero Card -->
+    <div class="featured-card">
+      <div>
+        <h2>⚡ Flash Your FerryLight LED Display</h2>
+        <p>Install firmware v0.3.29 directly in your browser with our 2-minute tabbed USB setup wizard. No software or coding required.</p>
+      </div>
+      <a class="btn btn-primary" href="flash/" style="white-space: nowrap;">
+        Launch Web Flasher &rarr;
+      </a>
     </div>
-    <div class="card">
-      <h2>🎬 Slide presentation</h2>
-      <p>Reveal.js deck — use arrow keys to navigate. Great for demos and talks.</p>
-      <a href="ferrylight-presentation.html">Open presentation</a>
-    </div>
-    <div class="card">
-      <h2>🎧 Podcast</h2>
-      <p>Deep dive with Markus on building FerryLight.</p>
-      <a href="assets/FerryLightDeepDivePodcastWithMarkusv1.mp3">Listen / download</a>
-    </div>
-    <div class="card">
-      <h2>📄 PDF</h2>
-      <p>FerryLight: A Digital Lifeline for the North Shore.</p>
-      <a href="assets/FerryLight_Digital_Lifeline_for_the_North_Shore.pdf">Download PDF</a>
-    </div>
-    <div class="card">
-      <h2>🚢 Live app</h2>
-      <p>Real-time ferry status, weather, events, and more.</p>
-      <a href="https://ferrylight.online">ferrylight.online</a>
-    </div>
+
+    <!-- The Practical Problem & Solution -->
+    <section>
+      <div class="section-title">
+        <span>📍</span> The Problem &amp; Why FerryLight Was Built
+      </div>
+      <p class="section-subtitle">
+        The cable ferry at Englishtown/Jersey Cove (vessel <em>Torquil MacLean</em>, MMSI 316023888) is a vital link connecting communities along Cape Breton's Cabot Trail. When the ferry is running, the crossing takes 3 to 5 minutes. But when service is suspended due to mechanical issues, tides, or high winds, travelers face an unexpected <strong>25-minute detour via the St. Ann's Loop</strong>.
+      </p>
+      <p style="color: var(--fg); font-size: 0.95rem; margin-bottom: 16px;">
+        FerryLight eliminates travel uncertainty by providing automated live vessel tracking, waiting line estimations, and at-a-glance hardware LED displays for home kitchens and living rooms.
+      </p>
+
+      <div class="photo-grid">
+        <div class="photo-card">
+          <img src="images/BoardingTheFerryonEnglishtownSide.jpg" alt="Boarding the ferry on Englishtown side" loading="lazy">
+          <div class="caption">Englishtown Ferry Terminal</div>
+        </div>
+        <div class="photo-card">
+          <img src="images/FerryDockingonJerseyCoveSide.jpg" alt="Ferry docking on Jersey Cove side" loading="lazy">
+          <div class="caption">Jersey Cove Docking Approach</div>
+        </div>
+        <div class="photo-card">
+          <img src="images/CarlineupAtFerryEnglishTownSide.png" alt="Car line up at ferry Englishtown side" loading="lazy">
+          <div class="caption">Summer Lineups &amp; Wait Times</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Core Features Grid -->
+    <section>
+      <div class="section-title">
+        <span>🛠️</span> Core System Features
+      </div>
+      <p class="section-subtitle">A multi-layered IoT ecosystem built with open-source technologies.</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-icon">🚢</div>
+          <h3>Real-Time AIS Vessel Tracking</h3>
+          <p>Local RTL-SDR radio receiver captures AIS signals at 161.975/162.025 MHz. Geofenced 30-meter triggers automatically calculate crossing status, dock departures, and trip counts.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">💡</div>
+          <h3>Physical Smart LED Matrix Displays</h3>
+          <p>WLED / ESP8266 matrix displays show ferry status, wait times, and weather alerts at a glance for seniors and residents who don't want to check a smartphone app.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🌤️</div>
+          <h3>Hyperlocal Weather Station &amp; Alerts</h3>
+          <p>On-site DIY weather station measures real-time wind speed, gusts, temperature, UV index, and integrates live Environment Canada weather warnings.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">📱</div>
+          <h3>Offline-First PWA &amp; Push Alerts</h3>
+          <p>Fast, installable Progressive Web App (PWA) with smart push notifications for ferry outages, resumptions, and community announcements.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🦈</div>
+          <h3>Marine Wildlife &amp; Air Traffic</h3>
+          <p>Integrates OCEARCH marine animal tagging data to track regional shark movements alongside local ADS-B air traffic in St. Ann's Bay.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🎵</div>
+          <h3>Cape Breton Celtic Fiddle Tunes</h3>
+          <p>Includes a "Play a Tune" feature offering curated traditional Cape Breton fiddle music to enjoy while waiting in the ferry lineup.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Physical Hardware Showcase -->
+    <section>
+      <div class="section-title">
+        <span>💡</span> Hardware in Action: The FerryLight LED Display
+      </div>
+      <p class="section-subtitle">
+        Custom-built 32×8 and 64×8 WS2812B matrix displays running our optimized zero-heap ESP8266 firmware.
+      </p>
+
+      <div class="photo-grid">
+        <div class="photo-card">
+          <img src="images/led_display_englishtown.jpg" alt="FerryLight LED matrix showing Englishtown status" loading="lazy">
+          <div class="caption">Live Crossing Status</div>
+        </div>
+        <div class="photo-card">
+          <img src="images/led_display_jersey.jpg" alt="FerryLight LED matrix showing Jersey Cove status" loading="lazy">
+          <div class="caption">Jersey Cove Docking Notice</div>
+        </div>
+        <div class="photo-card">
+          <img src="images/led_display_time.jpg" alt="FerryLight LED matrix showing synchronized clock" loading="lazy">
+          <div class="caption">Time, Weather &amp; Standalone Mode</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Podcast & Media Hub -->
+    <section>
+      <div class="section-title">
+        <span>🎧</span> Podcast &amp; Media Resources
+      </div>
+      <p class="section-subtitle">Deep dive into the architecture, design choices, and community impact.</p>
+
+      <div class="card">
+        <h3>FerryLight Deep Dive Podcast with Markus</h3>
+        <p>Listen to Markus van Kempen discuss how FerryLight was created, from radio antennas to cloud servers and LED displays.</p>
+        
+        <div class="audio-box">
+          <audio controls preload="none">
+            <source src="assets/FerryLightDeepDivePodcastWithMarkusv1.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+          <a class="btn btn-secondary" href="assets/FerryLightDeepDivePodcastWithMarkusv1.mp3" download style="font-size: 0.85rem; white-space: nowrap;">
+            📥 Download MP3
+          </a>
+        </div>
+      </div>
+
+      <div class="grid-3" style="margin-top: 14px;">
+        <div class="card">
+          <h3>🎬 Slide Deck</h3>
+          <p>Interactive Reveal.js presentation with system architecture slides.</p>
+          <a class="btn btn-secondary" href="ferrylight-presentation.html" style="margin-top: 8px; width: 100%;">
+            Open Presentation &rarr;
+          </a>
+        </div>
+
+        <div class="card">
+          <h3>📄 PDF Whitepaper</h3>
+          <p>Download "FerryLight: A Digital Lifeline for the North Shore" document.</p>
+          <a class="btn btn-secondary" href="assets/FerryLight_Digital_Lifeline_for_the_North_Shore.pdf" download style="margin-top: 8px; width: 100%;">
+            Download PDF &rarr;
+          </a>
+        </div>
+
+        <div class="card">
+          <h3>📖 Technical Briefing</h3>
+          <p>Read the complete technical specification and Node-RED data flows.</p>
+          <a class="btn btn-secondary" href="ferrylight-blog.md" style="margin-top: 8px; width: 100%;">
+            Read Specs &rarr;
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture Diagram Preview -->
+    <section>
+      <div class="section-title">
+        <span>🏗️</span> System Architecture: Signal to Screen
+      </div>
+      <p class="section-subtitle">From RTL-SDR radio signals through Node-RED, Express.js &amp; PostgreSQL to the PWA and LED display.</p>
+
+      <div class="card" style="text-align: center; padding: 16px;">
+        <img src="images/FerryLighSystemOverview.png" alt="FerryLight Signal to Screen System Overview" style="width: 100%; border-radius: 12px; display: block;" loading="lazy">
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p>Created by <a href="https://github.com/markusvankempen" target="_blank">Markus van Kempen</a> &bull; Englishtown / North Shore, Cape Breton, Nova Scotia</p>
+      <p style="margin-top: 6px;">
+        Live Web App: <a href="https://ferrylight.online" target="_blank">ferrylight.online</a> &bull;
+        Web Flasher: <a href="flash/">FerryLight Flasher</a> &bull;
+        GitHub: <a href="https://github.com/markusvankempen/FerryLight" target="_blank">markusvankempen/FerryLight</a>
+      </p>
+    </footer>
   </div>
-
-  <footer>
-    By <a href="https://github.com/markusvankempen">Markus van Kempen</a> ·
-    App repo: <a href="https://github.com/markusvankempen/FerryLight">FerryLight</a>
-  </footer>
 </body>
 </html>
