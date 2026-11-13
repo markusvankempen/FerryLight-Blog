@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Install FerryLight Firmware | Web Serial Flasher</title>
+  <meta name="description" content="Flash or update FerryLight LED Display firmware directly from your browser over Web Serial USB.">
+  <link rel="canonical" href="https://markusvankempen.github.io/FerryLight-Blog/flash/">
+  <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+  <style>
+    :root {
+      --bg: #08101f;
+      --card: #122040;
+      --border: #243152;
+      --fg: #e8eef8;
+      --mut: #9aa8c0;
+      --acc: #00d0ff;
+      --btn: #16c060;
+      --btn-hover: #13a854;
+      --code-bg: #05080f;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      padding: 24px 16px 60px;
+    }
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: #1a3050;
+      color: var(--acc);
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    p.lead {
+      color: var(--mut);
+      font-size: 1.05rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 24px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+    .btn-flash {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: var(--btn);
+      color: #ffffff;
+      font-size: 1.1rem;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      box-shadow: 0 4px 12px rgba(22, 192, 96, 0.35);
+    }
+    .btn-flash:hover {
+      background: var(--btn-hover);
+      transform: translateY(-1px);
+    }
+    .btn-flash:active {
+      transform: translateY(0);
+    }
+    .unsupported, .not-allowed {
+      display: block;
+      margin-top: 14px;
+      color: #f87171;
+      font-size: 0.9rem;
+      background: rgba(248, 113, 113, 0.1);
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(248, 113, 113, 0.2);
+    }
+    .steps {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+    .steps h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    ol {
+      padding-left: 20px;
+      color: var(--fg);
+    }
+    ol li {
+      margin-bottom: 12px;
+      padding-left: 4px;
+    }
+    ol li strong {
+      color: #fff;
+    }
+    .note {
+      font-size: 0.85rem;
+      color: var(--mut);
+      margin-top: 4px;
+    }
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 24px;
+    }
+    .links a {
+      color: var(--acc);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      background: #1a3050;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .links a:hover {
+      background: #243a60;
+      border-color: var(--acc);
+    }
+    footer {
+      text-align: center;
+      color: var(--mut);
+      font-size: 0.8rem;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge">FerryLight v0.3.28</div>
+      <h1>FerryLight Web Flasher</h1>
+      <p class="lead">Install or update FerryLight firmware on your ESP8266 / Wemos D1 Mini directly from your web browser over USB.</p>
+    </header>
+
+    <div class="card">
+      <esp-web-install-button manifest="manifest.json">
+        <button slot="activate" class="btn-flash">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v10M18 8l-6 6-6-6M4 20h16"/>
+          </svg>
+          Connect &amp; Install FerryLight
+        </button>
+        <span slot="unsupported" class="unsupported">
+          Your browser does not support Web Serial. Please use Google Chrome, Microsoft Edge, Opera, or Brave on desktop.
+        </span>
+        <span slot="not-allowed" class="not-allowed">
+          Web Serial requires HTTPS or localhost. Ensure you are visiting this page via HTTPS.
+        </span>
+      </esp-web-install-button>
+      <p class="note" style="margin-top: 14px;">No drivers, Python, or command-line tools needed.</p>
+    </div>
+
+    <div class="steps">
+      <h2>How to Flash Your Display</h2>
+      <ol>
+        <li>
+          <strong>Connect ESP8266 via USB:</strong> Plug your Wemos D1 Mini or NodeMCU board into your computer with a USB data cable.
+        </li>
+        <li>
+          <strong>Click "Connect &amp; Install FerryLight":</strong> A browser dialog will appear listing available USB serial devices.
+        </li>
+        <li>
+          <strong>Select Your Serial Port:</strong> Choose your board's COM / USB serial port (e.g. <code>USB Serial</code>, <code>ch341-uart</code>, or <code>CP2102</code>) and click <em>Connect</em>.
+        </li>
+        <li>
+          <strong>Wait for Flashing to Complete:</strong> The installer will erase and write the firmware binary, then reset the board.
+        </li>
+        <li>
+          <strong>Wi-Fi Setup:</strong> Once flashed, join the open Wi-Fi network <code>FerryLight-...</code> on your phone/computer and open <a href="http://192.168.4.1" target="_blank" style="color:var(--acc);">http://192.168.4.1</a> to configure your home Wi-Fi and MQTT.
+        </li>
+      </ol>
+    </div>
+
+    <div class="links">
+      <a href="firmware.bin" download>📥 Download firmware.bin</a>
+      <a href="../" target="_blank">🏠 FerryLight Blog Home</a>
+      <a href="https://github.com/markusvankempen/FerryLight-Blog" target="_blank">⭐ GitHub Repository</a>
+    </div>
+
+    <footer>
+      FerryLight LED Display &bull; Created by Markus van Kempen &bull; Open Source
+    </footer>
+  </div>
+</body>
+</html>
